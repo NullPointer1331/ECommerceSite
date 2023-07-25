@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.card {
+    width: 18rem;
+    float: left;
+    margin:.5em;
+}
