@@ -57,7 +57,7 @@ namespace ECommerceSite.Controllers
             {
                 _context.Products.Update(product);
                 await _context.SaveChangesAsync();
-                ViewData["Message"] = $"Product {product.Name} updated successfully!";
+                TempData["Message"] = $"{product.Name} updated successfully!";
                 return RedirectToAction("Index");
             }
             return View(product);
