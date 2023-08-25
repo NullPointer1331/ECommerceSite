@@ -32,6 +32,13 @@ namespace ECommerceSite.Models
         [Range(0, double.MaxValue)]
         public double Price { get; set; }
 
+        public Product()
+        {
+            Name = "Default";
+            Category = "Other";
+            Price = 0.0;
+        }
+
         public Product(string name, string category, double price)
         {
             Name = name;
