@@ -62,5 +62,33 @@ namespace ECommerceSite.Controllers
             }
             return View(product);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Product? product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            Product? product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                TempData["Message"] = "You attempted to delete something that doesn't exist";
+            }
+            else
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = $"{product.Name} deleted successfully!";
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
