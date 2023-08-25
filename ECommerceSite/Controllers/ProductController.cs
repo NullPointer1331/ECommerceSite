@@ -25,13 +25,13 @@ namespace ECommerceSite.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create(Product product)
         {
             if(ModelState.IsValid)
             {
                 _context.Products.Add(product);
-                _context.SaveChanges();
-                ViewData["Message"] = "Product added successfully!";
+                await _context.SaveChangesAsync();
+                ViewData["Message"] = $"Product {product.Name} added successfully!";
                 return View();
             }
             return View(product);
