@@ -90,5 +90,16 @@ namespace ECommerceSite.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            Product? product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
     }
 }
