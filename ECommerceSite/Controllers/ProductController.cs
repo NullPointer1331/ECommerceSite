@@ -1,6 +1,7 @@
 ﻿using ECommerceSite.Data;
 using ECommerceSite.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceSite.Controllers
 {
@@ -13,9 +14,10 @@ namespace ECommerceSite.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Product> products = await _context.Products.ToListAsync();
+            return View(products);
         }
 
         [HttpGet]
