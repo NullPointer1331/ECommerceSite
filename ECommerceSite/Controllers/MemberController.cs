@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ECommerceSite.Models;
 using ECommerceSite.Data;
 
@@ -34,6 +35,30 @@ namespace ECommerceSite.Controllers
                 await _context.SaveChangesAsync();
                 TempData["Message"] = $"Member {member.Email} added successfully!";
                 return RedirectToAction("Index", "Home");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                Member member = await _context.Members
+                    .Where(m => m.Email == model.Email && m.Password == model.Password)
+                    .FirstOrDefaultAsync();
+                if(member != null)
+                {
+                    TempData["Message"] = $"Welcome {member.Email}!";
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError("", "Invalid email or password");
             }
             return View(model);
         }
