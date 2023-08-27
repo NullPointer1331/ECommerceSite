@@ -8,5 +8,6 @@ namespace ECommerceSite.Data
 
         }
         public DbSet<Models.Product> Products { get; set; }
+        public DbSet<Models.Member> Members { get; set; }
     }
 }
