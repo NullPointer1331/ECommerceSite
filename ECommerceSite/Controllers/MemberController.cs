@@ -33,10 +33,15 @@ namespace ECommerceSite.Controllers
                 };
                 _context.Members.Add(member);
                 await _context.SaveChangesAsync();
-                HttpContext.Session.SetString("Email", member.Email);
+                LogUserIn(member.Email);
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
+        }
+
+        private void LogUserIn(string email)
+        {
+            HttpContext.Session.SetString("Email", email);
         }
 
         [HttpGet]
@@ -55,12 +60,18 @@ namespace ECommerceSite.Controllers
                     .FirstOrDefaultAsync();
                 if(member != null)
                 {
-                    HttpContext.Session.SetString("Email", member.Email);
+                    LogUserIn(member.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Invalid email or password");
             }
             return View(model);
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
