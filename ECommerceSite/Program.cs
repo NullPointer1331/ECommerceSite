@@ -6,8 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<PetStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// Access session on views
+builder.Services.AddHttpContextAccessor();
+
+// Add Session - 1/2
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -25,6 +34,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+// Add Session - 2/2
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

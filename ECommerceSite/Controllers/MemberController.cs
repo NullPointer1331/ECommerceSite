@@ -33,7 +33,7 @@ namespace ECommerceSite.Controllers
                 };
                 _context.Members.Add(member);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = $"Member {member.Email} added successfully!";
+                HttpContext.Session.SetString("Email", member.Email);
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
@@ -55,7 +55,7 @@ namespace ECommerceSite.Controllers
                     .FirstOrDefaultAsync();
                 if(member != null)
                 {
-                    TempData["Message"] = $"Welcome {member.Email}!";
+                    HttpContext.Session.SetString("Email", member.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Invalid email or password");
