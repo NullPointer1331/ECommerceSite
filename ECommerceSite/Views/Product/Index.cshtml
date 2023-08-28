@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>
+﻿@model ProductCatalogViewModel
 
 @{
     ViewData["Title"] = "Product Catalog";
@@ -17,23 +17,29 @@
 <p>
     <a asp-action="Create">Create Product</a>
 </p>
+@if (Model.Products.Count == 0)
+{
+    <p>There are no products to display.</p>
+}
+else
+{
 <table class="table table-striped table-hover table-bordered">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Products[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Products[0].Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Products[0].Price)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Products) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -53,3 +59,23 @@
 }
     </tbody>
 </table>
+}
+<nav aria-label="Product Catalog Pages">
+    <ul class="pagination">
+    @for (int i = 1; i <= Model.LastPage; i++)
+    {
+        if(i == Model.CurrentPage)
+        {
+            <li class="page-item active">
+                <a class="page-link">@i</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-id="@i">@i</a>
+            </li>
+        }
+    }
+    </ul>
+</nav>

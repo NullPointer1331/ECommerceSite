@@ -14,10 +14,21 @@ namespace ECommerceSite.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            List<Product> products = await _context.Products.ToListAsync();
-            return View(products);
+            const int ProductsPerPage = 10;
+            int currPage = id ?? 1; // null-coalescing operator
+
+            int totalnumProducts = await _context.Products.CountAsync();
+            int lastPage = (int)Math.Ceiling((double)totalnumProducts / ProductsPerPage);
+
+            List<Product> products = await _context.Products
+                .Skip(ProductsPerPage * (currPage - 1))
+                .Take(ProductsPerPage)
+                .ToListAsync();
+
+            ProductCatalogViewModel catalogModel = new ProductCatalogViewModel(products, lastPage, currPage);
+            return View(catalogModel);
         }
 
         [HttpGet]
@@ -33,8 +44,8 @@ namespace ECommerceSite.Controllers
             {
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
-                ViewData["Message"] = $"Product {product.Name} added successfully!";
-                return View();
+                TempData["Message"] = $"Product {product.Name} added successfully!";
+                return RedirectToAction("Index");
             }
             return View(product);
         }
