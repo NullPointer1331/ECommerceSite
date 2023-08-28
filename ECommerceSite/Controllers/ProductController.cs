@@ -19,11 +19,16 @@ namespace ECommerceSite.Controllers
             const int ProductsPerPage = 3;
             int currPage = id ?? 1; // null-coalescing operator
 
+            int totalnumProducts = await _context.Products.CountAsync();
+            int lastPage = (int)Math.Ceiling((double)totalnumProducts / ProductsPerPage);
+
             List<Product> products = await _context.Products
                 .Skip(ProductsPerPage * (currPage - 1))
                 .Take(ProductsPerPage)
                 .ToListAsync();
-            return View(products);
+
+            ProductCatalogViewModel catalogModel = new ProductCatalogViewModel(products, lastPage, currPage);
+            return View(catalogModel);
         }
 
         [HttpGet]
