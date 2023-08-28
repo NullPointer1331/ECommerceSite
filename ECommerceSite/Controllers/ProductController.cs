@@ -16,7 +16,7 @@ namespace ECommerceSite.Controllers
 
         public async Task<IActionResult> Index(int? id)
         {
-            const int ProductsPerPage = 3;
+            const int ProductsPerPage = 10;
             int currPage = id ?? 1; // null-coalescing operator
 
             int totalnumProducts = await _context.Products.CountAsync();
